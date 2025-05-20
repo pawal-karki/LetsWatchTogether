@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>LetsWatchTogther | Netflix Enhancement</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        width: 320px;
+        height: 400px;
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, sans-serif;
+        background: #1a1b1e;
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      .header {
+        padding: 24px;
+        background: linear-gradient(135deg, #1db954, #1a9544);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .header::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+            45deg,
+            rgba(255, 255, 255, 0.1) 25%,
+            transparent 25%
+          ),
+          linear-gradient(-45deg, rgba(255, 255, 255, 0.1) 25%, transparent 25%);
+        background-size: 8px 8px;
+        opacity: 0.3;
+      }
+
+      .logo {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .subtitle {
+        font-size: 14px;
+        opacity: 0.9;
+        font-weight: 400;
+      }
+
+      .content {
+        padding: 24px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .button {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 20px;
+        border: none;
+        border-radius: 12px;
+        background: #2c2d30;
+        color: white;
+        font-size: 15px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .button:hover {
+        background: #35363a;
+        transform: translateY(-2px);
+      }
+
+      .button:active {
+        transform: translateY(0);
+      }
+
+      .button::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        right: 16px;
+        width: 24px;
+        height: 24px;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="rgba(255,255,255,0.5)"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>')
+          no-repeat center;
+        transform: translateY(-50%);
+        opacity: 0.5;
+        transition: transform 0.2s ease;
+      }
+
+      .button:hover::after {
+        transform: translate(4px, -50%);
+        opacity: 0.8;
+      }
+
+      .github-btn {
+        background: #2ea043;
+      }
+
+      .github-btn:hover {
+        background: #3fb950;
+      }
+
+      .coffee-btn {
+        background: #ff5f5f;
+      }
+
+      .coffee-btn:hover {
+        background: #ff7070;
+      }
+
+      .bug-btn {
+        background: #2c2d30;
+      }
+
+      .footer {
+        padding: 16px 24px;
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.5);
+        text-align: center;
+        background: #1a1b1e;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .footer span {
+        color: #1db954;
+      }
+
+      .status {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        background: rgba(29, 185, 84, 0.1);
+        border-radius: 20px;
+        font-size: 13px;
+        color: #1db954;
+        margin-top: 12px;
+      }
+
+      .status::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        background: #1db954;
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(0.95);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(1.1);
+          opacity: 0.8;
+        }
+        100% {
+          transform: scale(0.95);
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <div class="logo">🎬 LetsWatchTogther</div>
+      <div class="subtitle">Watch Netflix together, anywhere</div>
+      <div class="status">Active</div>
+    </div>
+
+    <div class="content">
+      <button class="button github-btn" id="code-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+          <path
+            d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.385-1.335-1.755-1.335-1.755-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.605-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12"
+          />
+        </svg>
+        View on GitHub
+      </button>
+      <button class="button coffee-btn" id="coffee-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+          <path
+            d="M20 3H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.11 0 2-.89 2-2V5c0-1.11-.89-2-2-2zm0 5h-2V5h2v3zM4 19h16v2H4v-2z"
+          />
+        </svg>
+        Buy me a coffee
+      </button>
+      <button class="button bug-btn" id="bug-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+          <path
+            d="M20 8h-2.81c-.45-.78-1.07-1.45-1.82-1.96L17 4.41 15.59 3l-2.17 2.17C12.96 5.06 12.49 5 12 5s-.96.06-1.41.17L8.41 3 7 4.41l1.62 1.63C7.88 6.55 7.26 7.22 6.81 8H4v2h2.09c-.05.33-.09.66-.09 1v1H4v2h2v1c0 .34.04.67.09 1H4v2h2.81c1.04 1.79 2.97 3 5.19 3s4.15-1.21 5.19-3H20v-2h-2.09c.05-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.04-.67-.09-1H20V8zm-4 4v3c0 2.21-1.79 4-4 4s-4-1.79-4-4V8c0-2.21 1.79-4 4-4s4 1.79 4 4v4z"
+          />
+        </svg>
+        Report a bug
+      </button>
+    </div>
+
+    <div class="footer">
+      Made with <span>♥</span> Pawal Karki<span id="version"></span>
+    </div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

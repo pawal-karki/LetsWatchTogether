@@ -1,0 +1,20 @@
+{
+  "manifest_version": 2,
+  "name": "LetsWatchTogther",
+  "version": "2.0.0",
+  "icons": {
+    "48": "icons/Nikflix-48.png"
+  },
+  "permissions": ["webRequest", "webRequestBlocking", "<all_urls>"],
+  "browser_action": {
+    "default_icon": "icons/Nikflix-48.png",
+    "default_popup": "popup.html",
+    "default_title": "LetsWatchTogther - Watch Netflix together"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.netflix.com/*"],
+      "js": ["Main.js"]
+    }
+  ]
+}
