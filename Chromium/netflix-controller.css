@@ -882,95 +882,9 @@ input:checked + .subtitle-toggle-slider:before {
   animation: pulse 2s ease-in-out infinite;
 }
 
-#netflix-mini-screen {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  margin-right: 12px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-}
-
-#netflix-mini-screen:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-  transform: scale(1.1);
-}
-
-#netflix-mini-screen:active {
-  transform: scale(0.95);
-  background-color: rgba(255, 255, 255, 0.3);
-}
-
-#netflix-mini-screen svg {
-  width: 20px;
-  height: 20px;
-  fill: white;
-  transition: transform 0.2s ease;
-}
-
-#netflix-mini-screen:hover svg {
-  transform: scale(1.1);
-}
-
-.mini-screen-mode {
-  position: fixed !important;
-  width: 320px !important;
-  height: 180px !important;
-  bottom: 20px;
-  right: 20px;
-  z-index: 9999;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  resize: both !important;
-  min-width: 240px !important;
-  min-height: 135px !important;
-  max-width: 640px !important;
-  max-height: 360px !important;
-}
-
-.mini-screen-mode #netflix-video-overlay {
-  border-radius: 8px;
-}
-
-.mini-screen-mode .netflix-control-button {
-  transform: scale(0.8);
-}
-
-.mini-screen-mode #netflix-barre-container {
-  height: 3px;
-}
-
-.mini-screen-mode #mon-controleur-netflix {
-  font-size: 12px;
-}
-
-.mini-screen-mode #netflix-volume-slider {
-  width: 60px;
-}
-
-.mini-screen-mode.dragging {
-  transition: none !important;
-  cursor: move;
-}
-
+/* Remove mini screen related styles */
+#netflix-mini-screen,
+.mini-screen-mode,
 .mini-screen-drag-handle {
-  display: none;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 24px;
-  background: rgba(0, 0, 0, 0.5);
-  cursor: move;
-  z-index: 10000;
-}
-
-.mini-screen-mode .mini-screen-drag-handle {
-  display: block;
+  display: none !important;
 }

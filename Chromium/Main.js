@@ -702,111 +702,21 @@ function setupKeyboardShortcuts() {
 
         if (videoElement.paused) {
           videoElement.play();
-          if (state.buttonPlayPause) {
-            state.buttonPlayPause.innerHTML =
-              '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 19H18V5H14V19ZM6 19H10V5H6V19Z" fill="white"/></svg>';
-          }
         } else {
           videoElement.pause();
-          if (state.buttonPlayPause) {
-            state.buttonPlayPause.innerHTML =
-              '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 5V19L19 12L8 5Z" fill="white"/></svg>';
-          }
         }
         break;
-      case "ArrowLeft": // Left arrow - seek backward
-        e.preventDefault(); // Prevent default browser scrolling
-        e.stopPropagation(); // Stop event from being handled elsewhere
-        sendSeekKeyToNetflix("left"); // Send the key to Netflix player
-        break;
-
-      case "ArrowRight": // Right arrow - seek forward
-        e.preventDefault(); // Prevent default browser scrolling
-        e.stopPropagation(); // Stop event from being handled elsewhere
-        sendSeekKeyToNetflix("right"); // Send the key to Netflix player
-        break;
-      case "ArrowUp": // Up arrow - volume up
+      case "m": // Mini screen mode (Alt + M)
         e.preventDefault();
-        videoElement.volume = Math.min(1, videoElement.volume + 0.1);
-        if (state.volumeSlider) {
-          state.volumeSlider.value = videoElement.volume * 100;
-        }
-        showMessage(`Volume: ${Math.round(videoElement.volume * 100)}%`);
+        toggleMiniScreen();
         break;
-
-      case "ArrowDown": // Down arrow - volume down
-        e.preventDefault();
-        videoElement.volume = Math.max(0, videoElement.volume - 0.1);
-        if (state.volumeSlider) {
-          state.volumeSlider.value = videoElement.volume * 100;
-        }
-        showMessage(`Volume: ${Math.round(videoElement.volume * 100)}%`);
+      case "ArrowLeft":
+      case "ArrowRight":
+        // Update our progress bar to match Netflix's seeking
+        requestAnimationFrame(updateProgression);
         break;
-
-      case "m": // M - toggle mute
-      case "M":
-        e.preventDefault();
-        videoElement.muted = !videoElement.muted;
-        const volumeIcon = document.getElementById("netflix-volume-icon");
-        if (volumeIcon) {
-          volumeIcon.innerHTML = videoElement.muted
-            ? '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 4L9.91 6.09 12 8.18M4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.26c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.32 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9" fill="white"/></svg>'
-            : '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.84-5 6.7v2.07c4-.91 7-4.49 7-8.77 0-4.28-3-7.86-7-8.77M16.5 12c0-1.77-1-3.29-2.5-4.03V16c1.5-.71 2.5-2.24 2.5-4M3 9v6h4l5 5V4L7 9H3z" fill="white"/></svg>';
-        }
-        showMessage(videoElement.muted ? "Muted" : "Unmuted");
+      default:
         break;
-
-      case "f":
-      case "F":
-        e.preventDefault();
-        e.stopPropagation();
-        toggleFullScreen();
-        showMessage(
-          document.fullscreenElement ? "Fullscreen Mode" : "Exit Fullscreen"
-        );
-        break;
-
-      case "c": // C - toggle subtitles
-      case "C":
-        e.preventDefault();
-        state.subtitleEnabled = !state.subtitleEnabled;
-        showMessage(state.subtitleEnabled ? "Subtitles On" : "Subtitles Off");
-
-        // Update settings panel if open
-        if (state.subtitleSettingsPanel) {
-          state.subtitleSettingsPanel.querySelector(
-            "#subtitle-toggle-checkbox"
-          ).checked = state.subtitleEnabled;
-        }
-        break;
-
-      case "b": // B - toggle bilingual subtitles
-      case "B":
-        e.preventDefault();
-        e.stopPropagation();
-        state.bilingualEnabled = !state.bilingualEnabled;
-
-        if (state.bilingualEnabled) {
-          // Make sure subtitles are enabled first
-          if (!state.subtitleEnabled) {
-            state.subtitleEnabled = true;
-            // Update settings panel if open
-            if (state.subtitleSettingsPanel) {
-              state.subtitleSettingsPanel.querySelector(
-                "#subtitle-toggle-checkbox"
-              ).checked = true;
-            }
-          }
-        }
-        // Update settings panel if open
-        if (state.subtitleSettingsPanel) {
-          state.subtitleSettingsPanel.querySelector(
-            "#bilingual-toggle-checkbox"
-          ).checked = state.bilingualEnabled;
-        }
-        break;
-
-      // Add other shortcuts as needed
     }
   };
 
@@ -835,13 +745,6 @@ function setupKeyboardShortcuts() {
     videoElement.addEventListener("timeupdate", () => {
       requestAnimationFrame(updateProgression);
     });
-  }
-
-  // Mini screen mode (Alt + M)
-  if (e.altKey && e.key.toLowerCase() === "m") {
-    e.preventDefault();
-    toggleMiniScreen();
-    return;
   }
 }
 
@@ -1332,31 +1235,6 @@ function addMediaController() {
   // If subtitles were previously enabled, re-enable them
   // Create and add back button
   createBackButton();
-
-  // Add mini screen button
-  const miniScreenButton = document.createElement("button");
-  miniScreenButton.id = "netflix-mini-screen";
-  miniScreenButton.className = "netflix-control-button";
-  miniScreenButton.innerHTML =
-    '<svg viewBox="0 0 24 24"><path d="M19 7h-8v6h8V7zm-2 4h-4V9h4v2zm-8 0H5V9h4v2zm2 2h8v2h-8v-2zm-2 0H5v2h4v-2z"/></svg>';
-  miniScreenButton.title = "Toggle mini screen";
-  miniScreenButton.onclick = toggleMiniScreen;
-  state.buttonMiniScreen = miniScreenButton;
-
-  // Add mini screen button to controls
-  const playerControlsRight = document.createElement("div");
-  playerControlsRight.className = "controls-right";
-  playerControlsRight.appendChild(miniScreenButton);
-  playerControlsRight.appendChild(state.buttonFullScreen);
-
-  // Update the controls layout
-  const playerControls = document.createElement("div");
-  playerControls.className = "controls";
-  playerControls.appendChild(controlsLeft);
-  playerControls.appendChild(controlsCenter);
-  playerControls.appendChild(playerControlsRight);
-
-  state.controllerElement.appendChild(playerControls);
 }
 
 /**
@@ -1365,11 +1243,9 @@ function addMediaController() {
  */
 function removeElementsByClasses(classesNames) {
   classesNames.forEach((className) => {
-    const elementsToRemove = document.querySelectorAll(
-      `[class*="${className}"]`
-    );
-    if (elementsToRemove.length > 0) {
-      elementsToRemove.forEach((el) => el.remove());
+    const elements = document.getElementsByClassName(className);
+    while (elements.length > 0) {
+      elements[0].parentNode.removeChild(elements[0]);
     }
   });
 }
@@ -1623,111 +1499,9 @@ function getNextEpisodeId() {
 }
 
 function jumpToNextEpisode() {
-  getNextEpisodeId()
-    .then((nextEpisodeId) => {
-      if (nextEpisodeId) {
-        const nextEpisodeUrl = `https://www.netflix.com/watch/${nextEpisodeId}`;
-        window.location.href = nextEpisodeUrl; // Redirect to the next episode
-      } else {
-        console.log("No next episode found or error fetching data.");
-      }
-    })
-    .catch((error) => {
-      console.error("Error jumping to next episode:", error);
-    });
-  console.log("Next episode triggered....");
-}
-
-/**
- * Toggle mini screen mode
- */
-function toggleMiniScreen() {
-  const videoPlayer = document.querySelector(".watch-video");
-  const dragHandle =
-    document.querySelector(".mini-screen-drag-handle") || createDragHandle();
-
-  if (!state.isMiniScreen) {
-    // Save current position before entering mini screen
-    const rect = videoPlayer.getBoundingClientRect();
-    state.miniScreenPosition = {
-      x: rect.right - 340, // 320px width + 20px margin
-      y: window.innerHeight - 200, // 180px height + 20px margin
-    };
-
-    videoPlayer.classList.add("mini-screen-mode");
-    videoPlayer.style.transform = `translate(${state.miniScreenPosition.x}px, ${state.miniScreenPosition.y}px)`;
-    state.buttonMiniScreen.querySelector("svg").innerHTML =
-      '<path d="M4 14h16v6H4v-6zm0-10h16v6H4V4z"/>'; // Mini screen exit icon
-  } else {
-    videoPlayer.classList.remove("mini-screen-mode");
-    videoPlayer.style.transform = "";
-    state.buttonMiniScreen.querySelector("svg").innerHTML =
-      '<path d="M19 7h-8v6h8V7zm-2 4h-4V9h4v2zm-8 0H5V9h4v2zm2 2h8v2h-8v-2zm-2 0H5v2h4v-2z"/>'; // Mini screen enter icon
-  }
-
-  state.isMiniScreen = !state.isMiniScreen;
-  showMessage(
-    state.isMiniScreen
-      ? "Mini screen mode enabled"
-      : "Mini screen mode disabled"
-  );
-}
-
-/**
- * Create drag handle for mini screen mode
- */
-function createDragHandle() {
-  const handle = document.createElement("div");
-  handle.className = "mini-screen-drag-handle";
-
-  let isDragging = false;
-
-  handle.addEventListener("mousedown", (e) => {
-    if (!state.isMiniScreen) return;
-
-    isDragging = true;
-    const videoPlayer = document.querySelector(".watch-video");
-    videoPlayer.classList.add("dragging");
-
-    state.dragStartPosition = {
-      x: e.clientX - state.miniScreenPosition.x,
-      y: e.clientY - state.miniScreenPosition.y,
-    };
-
-    document.addEventListener("mousemove", handleDrag);
-    document.addEventListener("mouseup", stopDrag);
+  getNextEpisodeId().then((nextEpisodeId) => {
+    if (nextEpisodeId) {
+      window.location.href = `https://www.netflix.com/watch/${nextEpisodeId}`;
+    }
   });
-
-  function handleDrag(e) {
-    if (!isDragging) return;
-
-    const videoPlayer = document.querySelector(".watch-video");
-    const newX = e.clientX - state.dragStartPosition.x;
-    const newY = e.clientY - state.dragStartPosition.y;
-
-    // Constrain to window bounds
-    const maxX = window.innerWidth - videoPlayer.offsetWidth;
-    const maxY = window.innerHeight - videoPlayer.offsetHeight;
-
-    state.miniScreenPosition = {
-      x: Math.max(0, Math.min(maxX, newX)),
-      y: Math.max(0, Math.min(maxY, newY)),
-    };
-
-    videoPlayer.style.transform = `translate(${state.miniScreenPosition.x}px, ${state.miniScreenPosition.y}px)`;
-  }
-
-  function stopDrag() {
-    if (!isDragging) return;
-
-    isDragging = false;
-    const videoPlayer = document.querySelector(".watch-video");
-    videoPlayer.classList.remove("dragging");
-
-    document.removeEventListener("mousemove", handleDrag);
-    document.removeEventListener("mouseup", stopDrag);
-  }
-
-  document.querySelector(".watch-video").appendChild(handle);
-  return handle;
 }
